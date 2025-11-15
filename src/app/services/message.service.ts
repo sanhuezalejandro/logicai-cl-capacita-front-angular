@@ -7,7 +7,8 @@ import { Message, CreateMessageDto } from '../models/message.model';
   providedIn: 'root'
 })
 export class MessageService {
-  private apiUrl = '/api/messages';
+  // URL absoluta a la API en producción
+  private apiUrl = 'https://api-capacita.logicaisolutions.com/api/messages';
 
   constructor(private http: HttpClient) { }
 
