@@ -1,0 +1,1 @@
+# logicai-cl-capacita-front-angular
