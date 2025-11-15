@@ -61,6 +61,13 @@
                 <span class="message-date">{{ message.createdAt | date:'short' }}</span>
               </div>
               <p class="message-content">{{ message.content }}</p>
+              <button
+                class="delete-button"
+                (click)="deleteMessage(message.id)"
+                [disabled]="loading()"
+              >
+                Eliminar
+              </button>
             </div>
           }
         </div>

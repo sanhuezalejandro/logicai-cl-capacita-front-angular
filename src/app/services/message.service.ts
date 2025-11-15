@@ -23,5 +23,9 @@ export class MessageService {
   getMessage(id: number): Observable<Message> {
     return this.http.get<Message>(`${this.apiUrl}/${id}`);
   }
+
+  deleteMessage(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }
 

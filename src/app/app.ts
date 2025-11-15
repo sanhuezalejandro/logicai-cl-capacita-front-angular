@@ -58,4 +58,22 @@ export class App {
       }
     });
   }
+
+  deleteMessage(id: number): void {
+    if (!confirm('¿Estás seguro de que deseas eliminar este mensaje?')) {
+      return;
+    }
+
+    this.loading.set(true);
+    this.error.set(null);
+    this.messageService.deleteMessage(id).subscribe({
+      next: () => {
+        this.loadMessages();
+      },
+      error: (err) => {
+        this.error.set('Error al eliminar mensaje: ' + err.message);
+        this.loading.set(false);
+      }
+    });
+  }
 }
