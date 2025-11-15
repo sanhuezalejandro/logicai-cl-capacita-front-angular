@@ -19,6 +19,9 @@ export class App {
   };
   loading = signal(false);
   error = signal<string | null>(null);
+  successMessage = signal<string | null>(null);
+  showDeleteConfirm = signal(false);
+  messageToDelete: number | null = null;
 
   constructor(private messageService: MessageService) {
     this.loadMessages();
@@ -60,20 +63,39 @@ export class App {
   }
 
   deleteMessage(id: number): void {
-    if (!confirm('¿Estás seguro de que deseas eliminar este mensaje?')) {
-      return;
-    }
+    this.messageToDelete = id;
+    this.showDeleteConfirm.set(true);
+  }
+
+  confirmDelete(): void {
+    if (this.messageToDelete === null) return;
 
     this.loading.set(true);
     this.error.set(null);
-    this.messageService.deleteMessage(id).subscribe({
-      next: () => {
+    this.successMessage.set(null);
+    this.showDeleteConfirm.set(false);
+
+    this.messageService.deleteMessage(this.messageToDelete).subscribe({
+      next: (response) => {
+        const message = response?.message || 'Mensaje eliminado exitosamente';
+        this.successMessage.set(message);
         this.loadMessages();
+        this.messageToDelete = null;
+        // Ocultar el mensaje después de 3 segundos
+        setTimeout(() => {
+          this.successMessage.set(null);
+        }, 3000);
       },
       error: (err) => {
         this.error.set('Error al eliminar mensaje: ' + err.message);
         this.loading.set(false);
+        this.messageToDelete = null;
       }
     });
+  }
+
+  cancelDelete(): void {
+    this.showDeleteConfirm.set(false);
+    this.messageToDelete = null;
   }
 }
